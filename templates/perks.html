@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Perks{% endblock %}
+
+{% block head %}
+<style>
+    .perks-container {
+        padding: 3rem 0;
+    }
+    .perk-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .perk-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    .perk-header {
+        background: linear-gradient(135deg, #1a2a6c, #2c5364);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    .perk-header h3 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+    .perk-body {
+        padding: 2rem;
+    }
+    .points-info {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: rgba(26, 42, 108, 0.05);
+        border-radius: 15px;
+    }
+    .total-points {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #1a2a6c;
+        margin-bottom: 1rem;
+    }
+    .points-breakdown {
+        font-size: 1.1rem;
+        color: #666;
+    }
+    .points-item {
+        margin: 0.5rem 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    .interview-level {
+        padding: 1.5rem;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    .interview-level:hover {
+        border-color: #1a2a6c;
+        background: rgba(26, 42, 108, 0.02);
+    }
+    .level-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .level-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #1a2a6c;
+    }
+    .level-stars {
+        margin-left: 1rem;
+        font-size: 1.2rem;
+    }
+    .level-stars i {
+        margin-right: 0.2rem;
+    }
+    .points-required {
+        font-size: 1.1rem;
+        color: #666;
+    }
+    .level-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+    .status-available {
+        background: #28a745;
+        color: white;
+    }
+    .status-locked {
+        background: #dc3545;
+        color: white;
+    }
+    .points-needed {
+        font-size: 0.9rem;
+        color: #dc3545;
+        margin-top: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container perks-container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="points-info">
+                <div class="total-points">{{ total_points }} Points</div>
+                <div class="points-breakdown">
+                    <div class="points-item">
+                        <span>Base Points</span>
+                        <span>{{ base_points }}</span>
+                    </div>
+                    <div class="points-item">
+                        <span>Profile Completion Bonus</span>
+                        <span>{{ profile_points }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="perk-card">
+                <div class="perk-header">
+                    <h3>Interview Levels</h3>
+                </div>
+                <div class="perk-body">
+                    {% for level in interview_levels %}
+                    <div class="interview-level">
+                        <div class="level-header">
+                            <div>
+                                <div class="level-name">
+                                    {{ level.name }} Interview
+                                    <span class="level-stars">
+                                        {% for i in range(level.stars) %}
+                                        <i class="fas fa-star" style="color: {{ level.color }};"></i>
+                                        {% endfor %}
+                                    </span>
+                                </div>
+                                <div class="points-required">Required Points: {{ level.required_points }}</div>
+                            </div>
+                            {% if level.available %}
+                            <a href="{{ url_for('interview', level=level.name.lower()) }}" class="level-status status-available">Start Interview</a>
+                            {% else %}
+                            <span class="level-status status-locked">Locked</span>
+                            {% endif %}
+                        </div>
+                        {% if not level.available %}
+                        <div class="points-needed">
+                            Need {{ level.points_needed }} more points to unlock
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

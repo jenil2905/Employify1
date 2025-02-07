@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+
+{% block title %}AI Interview{% endblock %}
+
+{% block head %}
+<style>
+    .interview-container {
+        padding: 2rem 0;
+        min-height: calc(100vh - 100px);
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    }
+    .interview-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        border: none;
+    }
+    .interview-header {
+        background: linear-gradient(135deg, #1a2a6c, #2c5364);
+        color: white;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .interview-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+        opacity: 0.3;
+    }
+    .interview-level-heading {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        position: relative;
+    }
+    .interview-body {
+        padding: 2rem;
+    }
+    .chat-messages {
+        height: 400px;
+        overflow-y: auto;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+    }
+    .message {
+        margin-bottom: 1rem;
+        max-width: 80%;
+        clear: both;
+    }
+    .message.user {
+        float: right;
+    }
+    .message.ai {
+        float: left;
+    }
+    .message-content {
+        padding: 1rem;
+        border-radius: 15px;
+        position: relative;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .message.user .message-content {
+        background: #1a2a6c;
+        border-bottom-right-radius: 5px;
+    }
+    .message.ai .message-content {
+        background: #2c5364;
+        border-bottom-left-radius: 5px;
+    }
+    .message-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.3rem;
+        text-align: right;
+    }
+    .message.ai .message-time {
+        text-align: left;
+    }
+    .input-group {
+        background: white;
+        border-radius: 15px;
+        padding: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .form-control {
+        border: none;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        background: transparent;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    .btn-send {
+        background: linear-gradient(135deg, #1a2a6c, #2c5364);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-send:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .interview-levels {
+        margin-top: 3rem;
+    }
+    .level-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+    }
+    .level-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-color: #1a2a6c;
+    }
+    .level-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .level-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a2a6c, #2c5364);
+        color: white;
+    }
+    .level-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1a2a6c;
+    }
+    .level-points {
+        background: rgba(26, 42, 108, 0.1);
+        color: #1a2a6c;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+    .alert-perks {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 2rem;
+    }
+    .alert-perks .alert-heading {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .alert-perks hr {
+        border-color: rgba(255,255,255,0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="interview-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="interview-card">
+                    <div class="interview-header">
+                        <h3 class="interview-level-heading">
+                            <i class="fas fa-robot me-2"></i>
+                            {{ level.capitalize() }} Interview
+                        </h3>
+                    </div>
+                    <div class="interview-body">
+                        {% if not has_access %}
+                        <div class="alert alert-perks" role="alert">
+                            <h4 class="alert-heading"><i class="fas fa-lock me-2"></i>More Points Needed!</h4>
+                            <p>You need more points to access this interview level.</p>
+                            <hr>
+                            <div class="mb-0">
+                                <strong>Your current points:</strong> {{ current_perks }}<br>
+                                <strong>Required points:</strong> {{ required_perks }}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="chat-messages" id="chatMessages">
+                            {% for message in messages %}
+                            <div class="message {{ 'ai' if message.sender == 'ai' else 'user' }}">
+                                <div class="message-content">
+                                    {{ message.content }}
+                                </div>
+                                <div class="message-time">{{ message.time }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <form id="interviewForm">
+                            <div class="input-group">
+                                <input type="text" id="userInput" class="form-control" placeholder="Type your answer..." required>
+                                <button type="submit" class="btn btn-send">
+                                    <i class="fas fa-paper-plane me-2"></i>Send
+                                </button>
+                            </div>
+                        </form>
+                        {% endif %}
+
+                        <div class="interview-levels">
+                            <h5 class="mb-4">Available Interview Levels</h5>
+                            <a href="{{ url_for('interview', level='basic') }}" 
+                               class="level-card">
+                                <div class="level-info">
+                                    <div class="level-icon">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="level-name">Basic Interview</div>
+                                </div>
+                                <div class="level-points">100 Points</div>
+                            </a>
+                            <a href="{{ url_for('interview', level='intermediate') }}" 
+                               class="level-card">
+                                <div class="level-info">
+                                    <div class="level-icon">
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <div class="level-name">Intermediate Interview</div>
+                                </div>
+                                <div class="level-points">200 Points</div>
+                            </a>
+                            <a href="{{ url_for('interview', level='hard') }}" 
+                               class="level-card">
+                                <div class="level-info">
+                                    <div class="level-icon">
+                                        <i class="fas fa-stars"></i>
+                                    </div>
+                                    <div class="level-name">Hard Interview</div>
+                                </div>
+                                <div class="level-points">350 Points</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('interviewForm');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const message = userInput.value;
+            if (!message.trim()) return;
+
+            // Add user message to chat
+            addMessage('user', message);
+            userInput.value = '';
+
+            try {
+                const response = await fetch('/interview/respond', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        level: '{{ level }}'
+                    })
+                });
+
+                const data = await response.json();
+                addMessage('ai', data.response);
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('ai', 'Sorry, there was an error processing your response.');
+            }
+        });
+    }
+
+    function addMessage(sender, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = content;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.textContent = new Date().toLocaleTimeString();
+        
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(timeDiv);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Auto-scroll to bottom on page load
+    if (chatMessages) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+});
+</script>
+{% endblock %}

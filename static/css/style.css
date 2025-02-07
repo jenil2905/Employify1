@@ -1,0 +1,549 @@
+/* Custom styles */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+}
+
+body {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #fff;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    background: rgb(86, 161, 236) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #fff !important;
+}
+
+.nav-link {
+    color: rgba(231, 231, 231, 0.9) !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+.card {
+    background: rgb(247, 247, 247);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #fff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    color: #000000;
+    font-weight: 600;
+}
+
+.card-text {
+    color: rgba(14, 5, 5, 0.9);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-color), #5b9be6);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+    background: linear-gradient(45deg, #5b9be6, var(--primary-color));
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: #fff;
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Form styles */
+.form-control {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: #000000;
+    caret-color: #000000;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+    color: #000000;
+}
+
+.form-control::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.form-floating {
+    position: relative;
+}
+
+.form-floating > .form-control {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: #000000;
+    caret-color: #000000;
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+    padding: 1rem 0.75rem;
+}
+
+.form-floating > label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #000000;
+    padding: 1rem 0.75rem;
+    pointer-events: none;
+    border: none;
+    background-color: transparent;
+    transform-origin: 0 0;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+    background: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    opacity: 0.8;
+    transform: scale(0.85) translateY(-1rem);
+    color: #000000;
+    background: none;
+    padding: 0;
+    height: auto;
+}
+
+/* Remove any Bootstrap default backgrounds */
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+    background-color: #ffffff !important;
+}
+
+/* Form headings */
+.auth-heading {
+    color: #000000;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* Alert styles */
+.alert {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background-color: #e8f5e9 !important;  /* Light green background */
+    border-color: #c8e6c9 !important;
+    color: #000000 !important;
+}
+
+.alert-heading {
+    color: #000000;
+    font-weight: 600;
+}
+
+.alert p {
+    color: #000000;
+    margin-bottom: 0.5rem;
+}
+
+.alert .mb-0 {
+    color: #000000;
+    font-weight: 500;
+}
+
+.alert hr {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.alert-error {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+/* Welcome section styles */
+.welcome-section {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.welcome-section h1 {
+    color: #ffffff;  /* White color */
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+}
+
+.welcome-section .lead {
+    color: rgba(255, 255, 255, 0.9);  /* Slightly transparent white */
+    font-size: 1.25rem;
+}
+
+/* Get started section styles */
+.get-started-text {
+    color: #000000;  /* Black color */
+    font-weight: 600;
+}
+
+.get-started-description {
+    color: #000000;  /* Black color */
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Custom button styles */
+.btn-outline-primary {
+    background-color: #4CAF50;  /* Light green color */
+    border-color: #4CAF50;
+    color: #ffffff;  /* White text */
+}
+
+.btn-outline-primary:hover {
+    background-color: #45a049;  /* Slightly darker green on hover */
+    border-color: #45a049;
+    color: #ffffff;
+}
+
+/* Account link text */
+.account-link-text {
+    color: #000000;
+    text-decoration: none;
+}
+
+.account-link-text:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Perks page styles */
+.display-4 {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.list-group-item {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem !important;
+    transition: transform 0.2s ease;
+}
+
+.list-group-item:hover {
+    transform: translateX(5px);
+    background-color: rgba(74, 144, 226, 0.05);
+}
+
+.card-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Interview styles */
+.interview-chat {
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.chat-messages {
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    margin-bottom: 1rem;
+    max-width: 80%;
+}
+
+.message.user {
+    margin-left: auto;
+}
+
+.message.ai {
+    margin-right: auto;
+}
+
+.message-content {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.message.user .message-content {
+    background: var(--primary-color);
+    color: #fff;
+    border-top-right-radius: 0.25rem;
+}
+
+.message.ai .message-content {
+    background: #e9ecef;
+    color: #000;
+    border-top-left-radius: 0.25rem;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+    text-align: right;
+}
+
+.interview-levels .list-group-item {
+    transition: transform 0.2s ease;
+}
+
+.interview-levels .list-group-item:hover {
+    transform: translateX(5px);
+    background-color: rgba(74, 144, 226, 0.05);
+}
+
+.interview-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Points display styles */
+.points-display {
+    padding: 2rem 0;
+}
+
+.points-count {
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.points-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #130808;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+/* Points earning section */
+.card-body h4 {
+    color: #000000;
+    font-weight: 600;
+}
+
+/* Interview level styles */
+.interview-level-heading {
+    color: #000000;
+    font-weight: 600;
+}
+
+.interview-levels h4 {
+    color: #000000;
+    font-weight: 600;
+}
+
+.level-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.level-card:hover {
+    transform: translateY(-5px);
+}
+
+.level-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.level-icon.basic i {
+    color: #4CAF50;
+}
+
+.level-icon.intermediate i {
+    color: #2196F3;
+}
+
+.level-icon.tough i {
+    color: #9C27B0;
+}
+
+.level-card h5 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #000000;
+}
+
+.points-required {
+    color: #000000;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.level-card .level-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Interview levels list */
+.interview-levels-list {
+    margin-top: 1rem;
+}
+
+.level-item {
+    padding: 0.75rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+}
+
+.level-name {
+    color: #000000;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.perks-badge {
+    background-color: #000000 !important;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+}
+
+/* Interview level heading */
+.interview-level-heading {
+    color: #000000;
+    font-weight: 600;
+}
+
+/* Profile styles */
+.profile-form label {
+    font-weight: 500;
+    color: #000000;
+}
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+}
+
+.profile-photo-section {
+    margin-bottom: 2rem;
+}
+
+.profile-form .form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+    color: #000000;
+}
+
+.profile-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.profile-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.profile-form .btn-primary {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+}
+
+/* Profile completion indicator */
+.profile-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.profile-incomplete {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.profile-complete {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}

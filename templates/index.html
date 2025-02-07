@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+<style>
+.main-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    z-index: -1;
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 60px 0;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.welcome-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.welcome-section .lead {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.card-text {
+    color: #666;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+}
+
+.btn-outline-primary {
+    border: 2px solid #007bff;
+    border-radius: 25px;
+    padding: 10px 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+}
+
+.get-started-text {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.get-started-description {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #007bff, #00bfff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.row > div {
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.row > div:nth-child(1) { animation-delay: 0.2s; }
+.row > div:nth-child(2) { animation-delay: 0.4s; }
+.row > div:nth-child(3) { animation-delay: 0.6s; }
+.row > div:nth-child(4) { animation-delay: 0.8s; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-background"></div>
+<div class="container">
+    <div class="welcome-section fade-in">
+        <h1>Welcome to Employify</h1>
+        <p class="lead">Your journey to success starts here</p>
+    </div>
+
+    {% if current_user.is_authenticated %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h5 class="card-title">AI Interview</h5>
+                    <p class="card-text">Practice your interview skills with our AI-powered virtual interviewer. Multiple difficulty levels available.</p>
+                    <a href="{{ url_for('interview', level='basic') }}" class="btn btn-primary">Start Interview</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h5 class="card-title">Coding Challenges</h5>
+                    <p class="card-text">Master algorithms and data structures through our curated collection of coding challenges.</p>
+                    <a href="#" class="btn btn-primary">Start Practicing</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h5 class="card-title">Practice Games</h5>
+                    <p class="card-text">Learn coding concepts through interactive games. Make learning fun and effective!</p>
+                    <a href="#" class="btn btn-primary">Play Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h5 class="card-title">Skill Development</h5>
+                    <p class="card-text">Enhance your technical skills through interactive courses and hands-on projects.</p>
+                    <a href="#" class="btn btn-primary">Start Learning</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-center fade-in">
+        <div class="col-md-8 text-center">
+            <div class="card">
+                <div class="card-body py-5">
+                    <h2 class="get-started-text">Get Started Today</h2>
+                    <p class="get-started-description mb-4">Join thousands of successful developers who started their journey with Employify</p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Register Now</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+{% endblock %}

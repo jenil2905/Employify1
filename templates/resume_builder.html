@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Resume Builder</h2>
+    <form method="POST" action="{{ url_for('resume_builder') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <!-- Personal Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Personal Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Full Name*</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="contact" class="form-label">Contact Number*</label>
+                        <input type="tel" class="form-control" id="contact" name="contact" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email ID*</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="linkedin" class="form-label">LinkedIn Profile</label>
+                        <input type="url" class="form-control" id="linkedin" name="linkedin">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Professional Photo*</label>
+                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Education</h4>
+            </div>
+            <div class="card-body">
+                <!-- 10th Details -->
+                <div class="mb-4">
+                    <h5>10th Standard</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="tenth_school" class="form-label">School Name*</label>
+                            <input type="text" class="form-control" id="tenth_school" name="tenth_school" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tenth_percentage" class="form-label">Percentage*</label>
+                            <input type="number" step="0.01" class="form-control" id="tenth_percentage" name="tenth_percentage" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tenth_year" class="form-label">Year of Passing*</label>
+                            <input type="number" class="form-control" id="tenth_year" name="tenth_year" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tenth_marksheet" class="form-label">Upload Marksheet*</label>
+                        <input type="file" class="form-control" id="tenth_marksheet" name="tenth_marksheet" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <!-- 12th Details -->
+                <div class="mb-4">
+                    <h5>12th Standard</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="twelfth_school" class="form-label">School Name*</label>
+                            <input type="text" class="form-control" id="twelfth_school" name="twelfth_school" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="twelfth_percentage" class="form-label">Percentage*</label>
+                            <input type="number" step="0.01" class="form-control" id="twelfth_percentage" name="twelfth_percentage" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="twelfth_year" class="form-label">Year of Passing*</label>
+                            <input type="number" class="form-control" id="twelfth_year" name="twelfth_year" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="twelfth_marksheet" class="form-label">Upload Marksheet*</label>
+                        <input type="file" class="form-control" id="twelfth_marksheet" name="twelfth_marksheet" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <!-- College Details -->
+                <div id="college_container">
+                    <h5>College Education</h5>
+                    <div class="college-entry mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">College Name*</label>
+                                <input type="text" class="form-control" name="college_name[]" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Degree*</label>
+                                <input type="text" class="form-control" name="college_degree[]" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">CGPA/Percentage*</label>
+                                <input type="number" step="0.01" class="form-control" name="college_cgpa[]" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Year of Passing*</label>
+                                <input type="number" class="form-control" name="college_year[]" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Marksheet*</label>
+                                <input type="file" class="form-control" name="college_marksheet[]" accept=".pdf,.jpg,.jpeg,.png" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addCollegeEntry()">Add Another College Degree</button>
+            </div>
+        </div>
+
+        <!-- Skills and Certificates -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Skills and Certificates</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="skills" class="form-label">Skills*</label>
+                    <textarea class="form-control" id="skills" name="skills" rows="3" placeholder="Enter your skills (comma separated)" required></textarea>
+                </div>
+                <div id="certificates_container">
+                    <div class="certificate-entry mb-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Certificate Name*</label>
+                                <input type="text" class="form-control" name="certificate_name[]" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Certificate File*</label>
+                                <input type="file" class="form-control" name="certificate_file[]" accept=".pdf,.jpg,.jpeg,.png" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addCertificateEntry()">Add Another Certificate</button>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Additional Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="interests" class="form-label">Areas of Interest*</label>
+                    <textarea class="form-control" id="interests" name="interests" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="about" class="form-label">About You*</label>
+                    <textarea class="form-control" id="about" name="about" rows="4" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="summary" class="form-label">Professional Summary*</label>
+                    <textarea class="form-control" id="summary" name="summary" rows="4" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-5">
+            <button type="submit" class="btn btn-primary btn-lg">Generate Resume</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function addCollegeEntry() {
+    const container = document.getElementById('college_container');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'college-entry mb-4';
+    newEntry.innerHTML = `
+        <hr>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">College Name*</label>
+                <input type="text" class="form-control" name="college_name[]" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Degree*</label>
+                <input type="text" class="form-control" name="college_degree[]" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">CGPA/Percentage*</label>
+                <input type="number" step="0.01" class="form-control" name="college_cgpa[]" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Year of Passing*</label>
+                <input type="number" class="form-control" name="college_year[]" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Marksheet*</label>
+                <input type="file" class="form-control" name="college_marksheet[]" accept=".pdf,.jpg,.jpeg,.png" required>
+            </div>
+        </div>
+    `;
+    container.appendChild(newEntry);
+}
+
+function addCertificateEntry() {
+    const container = document.getElementById('certificates_container');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'certificate-entry mb-3';
+    newEntry.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Certificate Name*</label>
+                <input type="text" class="form-control" name="certificate_name[]" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Certificate File*</label>
+                <input type="file" class="form-control" name="certificate_file[]" accept=".pdf,.jpg,.jpeg,.png" required>
+            </div>
+        </div>
+    `;
+    container.appendChild(newEntry);
+}
+
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+</script>
+{% endblock %}

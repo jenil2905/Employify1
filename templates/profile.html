@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center auth-heading">Student Profile</h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data" class="profile-form">
+                        {{ form.csrf_token }}
+                        
+                        <div class="profile-photo-section text-center mb-4">
+                            <div id="preview-container" class="mb-3" {% if not current_user.profile_photo %}style="display: none;"{% endif %}>
+                                <img src="{% if current_user.profile_photo %}{{ url_for('static', filename='uploads/' + current_user.profile_photo) }}{% endif %}" 
+                                     id="photo-preview" class="profile-photo mb-3" alt="Profile Photo">
+                            </div>
+                            <div class="mb-3">
+                                <label for="profile_photo" class="form-label">Profile Photo</label>
+                                <input type="file" class="form-control" id="profile_photo" name="profile_photo" 
+                                       accept="image/*" onchange="previewImage(this)" {% if not current_user.profile_photo %}required{% endif %}>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="full_name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" 
+                                       value="{{ current_user.full_name if current_user.full_name else '' }}"
+                                       placeholder="Enter your full name"
+                                       required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" 
+                                       value="{{ current_user.email }}" 
+                                       readonly>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="course" class="form-label">Course</label>
+                                <input type="text" class="form-control" id="course" name="course" 
+                                       value="{{ current_user.course if current_user.course else '' }}"
+                                       placeholder="Enter your course name"
+                                       required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="university" class="form-label">University Name</label>
+                                <input type="text" class="form-control" id="university" name="university" 
+                                       value="{{ current_user.university if current_user.university else '' }}"
+                                       placeholder="Enter your university name"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="marks_10th" class="form-label">10th Marks (%)</label>
+                                <input type="number" class="form-control" id="marks_10th" name="marks_10th" 
+                                       step="0.01" min="0" max="100" 
+                                       value="{{ current_user.marks_10th if current_user.marks_10th else '' }}"
+                                       placeholder="Enter your 10th marks (0-100)"
+                                       oninput="validateMarks(this, '10th')"
+                                       required>
+                                <div class="invalid-feedback" id="marks_10th_feedback">
+                                    Marks must be between 0 and 100
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="marks_12th" class="form-label">12th Marks (%)</label>
+                                <input type="number" class="form-control" id="marks_12th" name="marks_12th" 
+                                       step="0.01" min="0" max="100" 
+                                       value="{{ current_user.marks_12th if current_user.marks_12th else '' }}"
+                                       placeholder="Enter your 12th marks (0-100)"
+                                       oninput="validateMarks(this, '12th')"
+                                       required>
+                                <div class="invalid-feedback" id="marks_12th_feedback">
+                                    Marks must be between 0 and 100
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="current_cgpa" class="form-label">Current CGPA</label>
+                                <input type="number" class="form-control" id="current_cgpa" name="current_cgpa" 
+                                       step="0.01" min="0" max="10" 
+                                       value="{{ current_user.current_cgpa if current_user.current_cgpa else '' }}"
+                                       placeholder="Enter your CGPA (0-10)"
+                                       oninput="validateCGPA(this)"
+                                       required>
+                                <div class="invalid-feedback" id="cgpa_feedback">
+                                    CGPA must be between 0 and 10
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" 
+                                     rows="3" placeholder="Enter your full address" required>{{ current_user.address if current_user.address else '' }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="contact_number" class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" id="contact_number" name="contact_number" 
+                                       pattern="[0-9]{10}" 
+                                       value="{{ current_user.contact_number if current_user.contact_number else '' }}"
+                                       placeholder="Enter 10-digit number"
+                                       required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="whatsapp_number" class="form-label">WhatsApp Number</label>
+                                <input type="tel" class="form-control" id="whatsapp_number" name="whatsapp_number" 
+                                       pattern="[0-9]{10}" 
+                                       value="{{ current_user.whatsapp_number if current_user.whatsapp_number else '' }}"
+                                       placeholder="Enter 10-digit number"
+                                       required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="parents_contact" class="form-label">Parents Contact</label>
+                                <input type="tel" class="form-control" id="parents_contact" name="parents_contact" 
+                                       pattern="[0-9]{10}" 
+                                       value="{{ current_user.parents_contact if current_user.parents_contact else '' }}"
+                                       placeholder="Enter 10-digit number"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Save Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function validateCGPA(input) {
+    const value = parseFloat(input.value);
+    const feedback = document.getElementById('cgpa_feedback');
+    
+    if (value < 0 || value > 10) {
+        input.classList.add('is-invalid');
+        feedback.style.display = 'block';
+    } else {
+        input.classList.remove('is-invalid');
+        feedback.style.display = 'none';
+    }
+}
+
+function previewImage(input) {
+    const preview = document.getElementById('photo-preview');
+    const previewContainer = document.getElementById('preview-container');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}

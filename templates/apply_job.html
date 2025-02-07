@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Apply for {{ job.title }}</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ job.company }}</h5>
+            <p class="card-text">{{ job.description }}</p>
+            
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <i class="fas fa-map-marker-alt"></i> {{ job.location }}
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-briefcase"></i> {{ job.job_type }}
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-money-bill-wave"></i> {{ job.salary }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <strong>Required Skills:</strong>
+                {% for skill in job.get_required_skills_list() %}
+                <span class="badge bg-primary me-1">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Submit Your Application</h5>
+            
+            {% if not current_user.resume_url %}
+            <div class="alert alert-warning">
+                <p>Please upload your resume in your profile before applying.</p>
+                <a href="{{ url_for('profile') }}" class="btn btn-primary">Update Profile</a>
+            </div>
+            {% else %}
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="cover_letter" class="form-label">Cover Letter</label>
+                    <textarea class="form-control" id="cover_letter" name="cover_letter" rows="6" required
+                              placeholder="Write a compelling cover letter explaining why you're a great fit for this position..."></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <p class="mb-2"><strong>Your Resume:</strong></p>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-file-pdf me-2"></i>
+                        <span>{{ current_user.resume_url.split('/')[-1] }}</span>
+                        <a href="{{ url_for('profile') }}" class="btn btn-link">Update Resume</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Application</button>
+                <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

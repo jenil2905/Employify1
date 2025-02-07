@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h2 class="card-title">{{ job.title }}</h2>
+                    <h5 class="card-subtitle mb-2 text-muted">{{ job.company }}</h5>
+                </div>
+                {% if current_user.is_authenticated and current_user.id != job.employer_id %}
+                <div>
+                    <a href="{{ url_for('apply_job', job_id=job.id) }}" class="btn btn-primary">Apply Now</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="row my-4">
+                <div class="col-md-4">
+                    <i class="fas fa-map-marker-alt"></i> {{ job.location }}
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-briefcase"></i> {{ job.job_type }}
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-money-bill-wave"></i> {{ job.salary }}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5>Job Description</h5>
+                <p>{{ job.description }}</p>
+            </div>
+
+            <div class="mb-4">
+                <h5>Requirements</h5>
+                <p>{{ job.requirements }}</p>
+            </div>
+
+            {% if job.required_skills %}
+            <div class="mb-4">
+                <h5>Required Skills</h5>
+                {% for skill in job.get_required_skills_list() %}
+                <span class="badge bg-primary me-1">{{ skill }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <h5>Additional Information</h5>
+                <ul class="list-unstyled">
+                    {% if job.experience_required %}
+                    <li><i class="fas fa-briefcase me-2"></i> {{ job.experience_required }} years of experience required</li>
+                    {% endif %}
+                    {% if job.education_required %}
+                    <li><i class="fas fa-graduation-cap me-2"></i> {{ job.education_required }}</li>
+                    {% endif %}
+                    {% if job.application_deadline %}
+                    <li><i class="fas fa-clock me-2"></i> Application deadline: {{ job.application_deadline.strftime('%Y-%m-%d') }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            {% if current_user.is_authenticated %}
+                {% if current_user.id == job.employer_id %}
+                <div class="mt-4">
+                    <a href="{{ url_for('job_applications', job_id=job.id) }}" class="btn btn-primary">
+                        View Applications
+                    </a>
+                </div>
+                {% else %}
+                <div class="mt-4">
+                    <a href="{{ url_for('apply_job', job_id=job.id) }}" class="btn btn-primary">Apply Now</a>
+                </div>
+                {% endif %}
+            {% else %}
+            <div class="alert alert-info">
+                <p>Please <a href="{{ url_for('login') }}">login</a> to apply for this job.</p>
+            </div>
+            {% endif %}
+
+            <div class="text-muted mt-4">
+                <small>Posted on {{ job.posted_date.strftime('%Y-%m-%d') }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

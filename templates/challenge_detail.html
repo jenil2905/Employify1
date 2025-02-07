@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}{{ challenge.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Challenge Description -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ challenge.title }}</h2>
+                    <span class="badge bg-primary">{{ challenge.points }} Points</span>
+                </div>
+                <div class="card-body">
+                    <div class="challenge-description">
+                        {{ challenge.description }}
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5>Test Cases:</h5>
+                        <pre class="test-cases">{{ challenge.test_cases }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Editor -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Your Solution</h3>
+                        {% if submission %}
+                            <span class="badge {% if submission.status == 'passed' %}bg-success{% elif submission.status == 'failed' %}bg-danger{% else %}bg-warning{% endif %}">
+                                {{ submission.status.title() }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('submit_challenge', challenge_id=challenge.id) }}">
+                        <div class="mb-3">
+                            <textarea id="code-editor" name="code" class="form-control" rows="15" 
+                                    placeholder="Write your code here...">{% if submission %}{{ submission.code }}{% endif %}</textarea>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('challenges', level=challenge.difficulty) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left"></i> Back to Challenges
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Submit Solution
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if submission and submission.status != 'pending' %}
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Submission Results</h4>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary">
+                        <p><strong>Score:</strong> {{ submission.score }}/{{ challenge.points }}</p>
+                        <p><strong>Submitted:</strong> {{ submission.submitted_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.challenge-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.test-cases {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+#code-editor {
+    font-family: monospace;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 300px;
+}
+
+.badge {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.result-summary {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.result-summary p {
+    margin-bottom: 0.5rem;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+    color: white;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+    border: none;
+}
+
+.btn-outline-primary {
+    border-color: #1a2a6c;
+    color: #1a2a6c;
+}
+
+.btn-outline-primary:hover {
+    background-color: #1a2a6c;
+    color: white;
+}
+</style>
+{% endblock %}

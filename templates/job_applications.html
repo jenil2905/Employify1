@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Applications for {{ job.title }}</h2>
+            <p class="text-muted">{{ job.company }}</p>
+        </div>
+        <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary">Back to Jobs</a>
+    </div>
+
+    {% if not applications %}
+    <div class="alert alert-info">
+        No applications received yet.
+    </div>
+    {% endif %}
+
+    {% for application in applications %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h4 class="card-title">{{ application.applicant.full_name }}</h4>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-envelope"></i> {{ application.applicant.email }}
+                        {% if application.applicant.contact_number %}
+                        <span class="ms-3"><i class="fas fa-phone"></i> {{ application.applicant.contact_number }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="text-end">
+                    <form method="POST" action="{{ url_for('update_application_status', application_id=application.id) }}" class="d-inline">
+                        <select name="status" class="form-select form-select-sm d-inline-block w-auto me-2" onchange="this.form.submit()">
+                            <option value="pending" {% if application.status == 'pending' %}selected{% endif %}>Pending Review</option>
+                            <option value="accepted" {% if application.status == 'accepted' %}selected{% endif %}>Accept</option>
+                            <option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}>Reject</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            {% if application.applicant.skills %}
+            <div class="mb-3">
+                <strong>Skills:</strong>
+                {% for skill in application.applicant.get_skills_list() %}
+                <span class="badge bg-primary me-1">{{ skill }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <strong>Education:</strong>
+                <p class="mb-1">{{ application.applicant.course }} at {{ application.applicant.university }}</p>
+                <p class="mb-0">
+                    CGPA: {{ application.applicant.current_cgpa }}
+                    {% if application.applicant.marks_12th %}
+                    <span class="ms-3">12th: {{ application.applicant.marks_12th }}%</span>
+                    {% endif %}
+                    {% if application.applicant.marks_10th %}
+                    <span class="ms-3">10th: {{ application.applicant.marks_10th }}%</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            {% if application.cover_letter %}
+            <div class="mb-3">
+                <strong>Cover Letter:</strong>
+                <p class="mt-2">{{ application.cover_letter }}</p>
+            </div>
+            {% endif %}
+
+            {% if application.resume_url %}
+            <div class="mb-3">
+                <strong>Resume:</strong>
+                <div class="mt-2">
+                    <i class="fas fa-file-pdf"></i>
+                    <a href="{{ application.resume_url }}" target="_blank" class="ms-2">View Resume</a>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="text-muted">
+                <small>Applied on {{ application.applied_date.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

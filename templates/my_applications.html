@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>My Applications</h2>
+    
+    {% if not applications %}
+    <div class="alert alert-info">
+        <p>You haven't applied to any jobs yet.</p>
+        <a href="{{ url_for('jobs') }}" class="btn btn-primary">Browse Jobs</a>
+    </div>
+    {% endif %}
+
+    {% for application in applications %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h3 class="card-title">{{ application.job.title }}</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ application.job.company }}</h6>
+                </div>
+                <div>
+                    {% if application.status == 'pending' %}
+                    <span class="badge bg-warning text-dark">Pending Review</span>
+                    {% elif application.status == 'accepted' %}
+                    <span class="badge bg-success">Accepted</span>
+                    {% elif application.status == 'rejected' %}
+                    <span class="badge bg-danger">Not Selected</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3 mt-3">
+                <div class="col-md-4">
+                    <i class="fas fa-map-marker-alt"></i> {{ application.job.location }}
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-briefcase"></i> {{ application.job.job_type }}
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-calendar-alt"></i> Applied on {{ application.applied_date.strftime('%Y-%m-%d') }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <strong>Cover Letter:</strong>
+                <p class="mt-2">{{ application.cover_letter }}</p>
+            </div>
+
+            {% if application.status == 'accepted' %}
+            <div class="alert alert-success">
+                <h5>Congratulations!</h5>
+                <p>Your application has been accepted. The employer will contact you soon with next steps.</p>
+            </div>
+            {% endif %}
+
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">Last updated: {{ application.last_updated.strftime('%Y-%m-%d %H:%M') }}</small>
+                <a href="{{ url_for('job_detail', job_id=application.job.id) }}" class="btn btn-outline-primary">View Job Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
